@@ -1,13 +1,19 @@
 <script setup>
+import { decodeCredential } from 'vue3-google-login'
+import store from '@/store';
+import router from '@/router';
 const callback = (response) => {
-  // This callback will be triggered when the user selects or login to
-  // his Google account from the popup
-  console.log("Handle the response", response)
+    // decodeCredential will retrive the JWT payload from the credential
+    const userData = decodeCredential(response.credential)
+    console.log('Handle the userData', userData)
+    store.actions.afterLoginUpdate(userData)
+    router.push('scan')
 }
 </script>
 
 <template>
-  <main>
-    <GoogleLogin :callback="callback"/>
-  </main>
+    <main>
+        <div class="text-3xl font-bold underline"></div>
+        <GoogleLogin :callback="callback" />
+    </main>
 </template>

@@ -4,8 +4,10 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import vue3GoogleLogin from 'vue3-google-login'
+import store from './store/index.js'
 
 const app = createApp(App)
+store.actions.initialize()
 
 app.use(router)
 
