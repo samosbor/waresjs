@@ -9,6 +9,7 @@
 
 <script setup>
 import Quagga from '@ericblade/quagga2'
+import store from '@/store'
 import { onMounted } from 'vue'
 
 onMounted(() => {
@@ -48,16 +49,15 @@ Quagga.onDetected(function (result) {
 
 // Function to send barcode via POST request
 function sendBarcode(barcode) {
-    const url = 'http://kas.tw/tagrecieve'
+    const url = import.meta.env.SERVER_URL + 'items/scan/' + barcode
+    const state = store.actions.currentState()
 
-    // You need to implement the actual POST request here
-    // This is just a placeholder and won't work without a backend
     fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ barcode: barcode })
+        body: JSON.stringify({ asset_id: barcode, user_id: state.user_id })
     })
         .then((response) => response.json())
         .then((data) => {

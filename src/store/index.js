@@ -4,6 +4,7 @@ const store = {
     state: reactive({
         isAuthenticated: null,
         email: '',
+        user_id: '',
         role: '',
         currentRoom: null
     }),
@@ -14,11 +15,13 @@ const store = {
             }
         },
         afterLoginUpdate(userData) {
-            if (userData.email && userData.email !== ''){
+            if (userData.email && userData.email !== '') {
                 store.state.isAuthenticated = true
                 store.state.email = userData.email
             }
-            
+        },
+        currentState() {
+            return this.state
         }
     }
 }
