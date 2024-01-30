@@ -9,6 +9,18 @@ import store from './store/index.js'
 const app = createApp(App)
 store.actions.initialize()
 
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+const vuetify = createVuetify({
+  components,
+  directives,
+})
+app.use(vuetify)
+
 app.use(router)
 
 app.use(vue3GoogleLogin, {

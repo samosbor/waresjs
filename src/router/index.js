@@ -3,6 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import ScanView from '@/views/ScanView.vue'
 import store from '@/store'
 import { computed } from 'vue'
+import AdminView from '@/views/AdminView.vue'
+import AssetView from '@/views/AssetView.vue'
 
 const state = computed(() => store.state)
 
@@ -18,6 +20,16 @@ const router = createRouter({
             path: '/scan',
             name: 'scan',
             component: ScanView
+        },
+        {
+            path: '/admin',
+            name: 'admin',
+            component: AdminView
+        },
+        {
+            path: '/admin/asset/:id',
+            name: 'asset',
+            component: AssetView
         }
     ]
 })
