@@ -13,6 +13,7 @@ const callback = (response) => {
 
 <template>
     <main>
+        <img alt="KAS logo" class="logo" src="@/assets/KASlogo.png" width="125" height="125" />
         <div class="text-3xl font-bold underline"></div>
         <GoogleLogin :callback="callback" />
     </main>

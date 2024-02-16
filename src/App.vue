@@ -1,82 +1,21 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-    <header>
-        <img alt="KAS logo" class="logo" src="@/assets/KASlogo.png" width="125" height="125" />
+    <v-toolbar :elevation="2" class="mb-2">
+        <v-toolbar-title>KAS Inventory</v-toolbar-title>
+        <v-spacer></v-spacer>
 
-        <div class="wrapper">
-            <nav>
-                <RouterLink to="/">Home</RouterLink>
-                <RouterLink to="/scan">Scan</RouterLink>
-            </nav>
-        </div>
-    </header>
+        <v-btn to="/"> Home </v-btn>
 
-    <RouterView />
+        <v-btn to="/scan"> Scan </v-btn>
+
+        <v-btn to="/admin"> Admin </v-btn>
+    </v-toolbar>
+    <div class="d-flex align-center justify-center" style="min-height: 300px">
+        <RouterView />
+    </div>
 </template>
 
-<style scoped>
-header {
-    line-height: 1.5;
-    max-height: 100vh;
-}
-
-.logo {
-    display: block;
-    margin: 0 auto 2rem;
-}
-
-nav {
-    width: 100%;
-    font-size: 12px;
-    text-align: center;
-    margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-    color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-    background-color: transparent;
-}
-
-nav a {
-    display: inline-block;
-    padding: 0 1rem;
-    border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-    border: 0;
-}
-
-@media (min-width: 1024px) {
-    header {
-        display: flex;
-        place-items: center;
-        padding-right: calc(var(--section-gap) / 2);
-    }
-
-    .logo {
-        margin: 0 2rem 0 0;
-    }
-
-    header .wrapper {
-        display: flex;
-        place-items: flex-start;
-        flex-wrap: wrap;
-    }
-
-    nav {
-        text-align: left;
-        margin-left: -1rem;
-        font-size: 1rem;
-
-        padding: 1rem 0;
-        margin-top: 1rem;
-    }
-}
-</style>
+<style></style>

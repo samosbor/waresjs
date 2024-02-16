@@ -21,7 +21,7 @@ const store = {
             }
         },
         currentState() {
-            return this.state
+            return store.state
         }
     }
 }

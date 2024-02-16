@@ -44,12 +44,12 @@ Quagga.onDetected(function (result) {
     const barcode = result.codeResult.code
 
     // Send the barcode via POST request
-    sendBarcode(barcode)
+    sendScanEvent(barcode)
 })
 
 // Function to send barcode via POST request
-function sendBarcode(barcode) {
-    const url = import.meta.env.SERVER_URL + 'items/scan/' + barcode
+function sendScanEvent(identifier) {
+    const url = import.meta.env.VITE_SERVER_URL + 'assets/scan/' + identifier
     const state = store.actions.currentState()
 
     fetch(url, {
@@ -57,7 +57,7 @@ function sendBarcode(barcode) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ asset_id: barcode, user_id: state.user_id })
+        body: JSON.stringify({ identifier: identifier, user_id: state.user_id, location: null, wifi_ap: null })
     })
         .then((response) => response.json())
         .then((data) => {
