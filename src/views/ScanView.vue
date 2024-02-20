@@ -22,7 +22,7 @@ onMounted(() => {
                 target: document.querySelector('#barcode-scanner')
             },
             decoder: {
-                readers: ['code_128_reader', 'ean_reader', 'upc_reader']
+                readers: ['upc_reader']
             }
         },
         function (err) {
@@ -57,7 +57,7 @@ function sendScanEvent(identifier) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ identifier: identifier, user_id: state.user_id, location: null, wifi_ap: null })
+        body: JSON.stringify({ identifier: identifier, google_email: state.email, user_id: state.user_id, location: null, wifi_ap: null })
     })
         .then((response) => response.json())
         .then((data) => {
