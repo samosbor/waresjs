@@ -1,71 +1,49 @@
 <template>
     <div>
         <h1>Scanme</h1>
-        <div id="interactive" class="viewport scanner">
-            <video></video>
-        </div>
+        <BarcodeScanner :qrbox="250" :fps="10" style="width: 500px" @result="onScan" />
     </div>
 </template>
 
-<script setup>
-import Quagga from '@ericblade/quagga2'
+<script>
+import BarcodeScanner from '@/components/BarcodeScanner.vue'
 import store from '@/store'
-import { onMounted } from 'vue'
 
-onMounted(() => {
-    // Configure Quagga and start the scanner
-    Quagga.init(
-        {
-            inputStream: {
-                name: 'Live',
-                type: 'LiveStream',
-                target: document.querySelector('#barcode-scanner')
-            },
-            decoder: {
-                readers: ['upc_reader']
-            }
+export default {
+    components: {
+        BarcodeScanner
+    },
+    methods: {
+        onScan(decodedText, decodedResult) {
+            console.log('Scan result:', decodedResult)
+            this.sendScanEvent(decodedText)
         },
-        function (err) {
-            if (err) {
-                console.error(err)
-                return
+        sendScanEvent(identifier) {
+            const url = import.meta.env.VITE_SERVER_URL + 'assets/scan/' + identifier
+            const state = store.actions.currentState()
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    identifier: identifier,
+                    google_email: state.email,
+                    user_id: state.user_id,
+                    location: null,
+                    wifi_ap: null
+                })
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('Success:', data)
+                })
+                .catch((error) => {
+                    console.error('Error:', error)
+                })
             }
-            Quagga.start()
-        }
-    )
-})
-
-// Attach listener to handle barcode detection
-Quagga.onDetected(function (result) {
-    // Stop the scanner
-    Quagga.stop()
-
-    // Get the barcode data
-    const barcode = result.codeResult.code
-
-    // Send the barcode via POST request
-    sendScanEvent(barcode)
-})
-
-// Function to send barcode via POST request
-function sendScanEvent(identifier) {
-    const url = import.meta.env.VITE_SERVER_URL + 'assets/scan/' + identifier
-    const state = store.actions.currentState()
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ identifier: identifier, google_email: state.email, user_id: state.user_id, location: null, wifi_ap: null })
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log('Success:', data)
-        })
-        .catch((error) => {
-            console.error('Error:', error)
-        })
+    }
 }
 </script>
 
