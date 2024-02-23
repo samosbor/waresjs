@@ -8,7 +8,6 @@
 <script>
 import BarcodeScanner from '@/components/BarcodeScanner.vue'
 import store from '@/store'
-
 export default {
     components: {
         BarcodeScanner
@@ -42,7 +41,7 @@ export default {
                 .catch((error) => {
                     console.error('Error:', error)
                 })
-            }
+        }
     }
 }
 </script>
