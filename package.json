@@ -11,6 +11,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "js-cookie": "^3.0.5",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5",
     "vue3-google-login": "^2.0.25",
