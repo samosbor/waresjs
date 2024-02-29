@@ -2,6 +2,23 @@
     <div>
         <h1>Scanme</h1>
         <BarcodeScanner :qrbox="250" :fps="10" style="width: 500px" @result="onScan" />
+        <v-form>
+            <v-text-field v-model="scannedItemData.name" label="Asset Name" />
+            <v-text-field v-model="scannedItemData.provider_name" label="Provider" />
+            <v-text-field v-model="scannedItemData.barcode" label="Barcode" />
+            <v-text-field v-model="scannedItemData.notes" label="Asset Notes" />
+            <v-text-field v-model="scannedItemData.current_value" label="Value" />
+            <v-text-field
+                v-model="scannedItemData.purchase_date"
+                label="Purchase Date"
+                append-inner-icon="mdi-calendar-month"
+                @click:append-inner="datePickOpen = !datePickOpen"
+            />
+            <v-dialog v-model="datePickOpen">
+                <v-date-picker v-model="scannedItemData.purchase_date" no-title scrollable />
+            </v-dialog>
+            <v-text-field v-model="scannedItemData.room_number" label="Room Number" />
+        </v-form>
     </div>
 </template>
 
@@ -11,6 +28,22 @@ import store from '@/store'
 export default {
     components: {
         BarcodeScanner
+    },
+    data() {
+        return {
+            scannedItemData: {
+                scan_id: null,
+                building_name: '',
+                room_number: '',
+                provider_name: '',
+                name: '',
+                current_value: null,
+                purchase_date: null,
+                barcode: '',
+                notes: ''
+            },
+            datePickOpen: false
+        }
     },
     methods: {
         onScan(decodedText, decodedResult) {
@@ -36,6 +69,7 @@ export default {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    this.scannedItemData = data
                     console.log('Success:', data)
                 })
                 .catch((error) => {
