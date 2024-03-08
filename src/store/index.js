@@ -11,17 +11,18 @@ const store = {
     }),
     actions: {
         initialize() {
-            const cookieState = JSON.parse(Cookies.get('state'))
-            console.log(cookieState)
+            const cookieCheck = Cookies.get('state')
+            if (cookieCheck === undefined || cookieCheck === null) {
+                store.state.isAuthenticated = false
+                return
+            }
+            const cookieState = JSON.parse(cookieCheck)
             if (
                 cookieState !== undefined &&
                 cookieState !== null &&
                 cookieState.isAuthenticated !== undefined
             ) {
                 store.state = cookieState
-            }
-            if (store.state.isAuthenticated == null) {
-                store.state.isAuthenticated = false
             }
         },
         afterLoginUpdate(userData) {
