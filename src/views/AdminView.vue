@@ -5,10 +5,7 @@
         :sort-by="[{ key: 'purchase_date', order: 'asc' }]"
     >
         <template v-slot:top>
-            <v-toolbar flat>
-                <v-toolbar-title>My CRUD</v-toolbar-title>
-                <v-divider class="mx-4" inset vertical></v-divider>
-                <v-spacer></v-spacer>
+            <v-toolbar>
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ props }">
                         <v-btn color="primary" dark class="mb-2" v-bind="props"> New Item </v-btn>
@@ -20,38 +17,40 @@
 
                         <v-card-text>
                             <v-container>
-                                <v-row>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field
-                                            v-model="editedItem.name"
-                                            label="Dessert name"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field
-                                            v-model="editedItem.calories"
-                                            label="Calories"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field
-                                            v-model="editedItem.fat"
-                                            label="Fat (g)"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field
-                                            v-model="editedItem.carbs"
-                                            label="Carbs (g)"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field
-                                            v-model="editedItem.protein"
-                                            label="Protein (g)"
-                                        ></v-text-field>
-                                    </v-col>
-                                </v-row>
+                                <v-text-field
+                                    v-model="editedItem.name"
+                                    label="Asset Name"
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="editedItem.purchase_date"
+                                    label="Purchase Date"
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="editedItem.building_name"
+                                    label="Building Name"
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="editedItem.room_number"
+                                    label="Room Number"
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="editedItem.provider_name"
+                                    label="Provider Name"
+                                ></v-text-field>
+
+                                <v-text-field
+                                    v-model="editedItem.current_value"
+                                    label="Current Value"
+                                ></v-text-field>
+
+                                <v-text-field
+                                    v-model="editedItem.barcode"
+                                    label="Barcode"
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="editedItem.notes"
+                                    label="Notes"
+                                ></v-text-field>
                             </v-container>
                         </v-card-text>
 
@@ -107,8 +106,7 @@ export default {
             { text: 'Barcode', key: 'barcode' },
             { text: 'Notes', key: 'notes' },
             { text: 'Building Name', key: 'building_name' },
-            { text: 'Room Number', key: 'room_number' },
-
+            { text: 'Room Number', key: 'room_number' }
         ],
         allAssets: [],
         currentAssets: [],
@@ -162,7 +160,7 @@ export default {
             const state = store.actions.currentState()
 
             fetch(url, {
-                method: 'GET',
+                method: 'GET'
             })
                 .then((response) => response.json())
                 .then((data) => {
