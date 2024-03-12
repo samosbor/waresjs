@@ -1,8 +1,8 @@
 <template>
     <v-data-table
         :headers="headers"
-        :items="desserts"
-        :sort-by="[{ key: 'calories', order: 'asc' }]"
+        :items="currentAssets"
+        :sort-by="[{ key: 'purchase_date', order: 'asc' }]"
     >
         <template v-slot:top>
             <v-toolbar flat>
@@ -93,35 +93,47 @@
     </v-data-table>
 </template>
 <script>
+import store from '@/store'
 export default {
     data: () => ({
         dialog: false,
         dialogDelete: false,
         headers: [
-            { text: 'Asset ID', key: 'asset_id' },
+            { text: 'Scan Id', key: 'scan_id' },
             { text: 'Name', key: 'name' },
             { text: 'Provider', key: 'provider_id' },
             { text: 'Current Value', key: 'current_value' },
             { text: 'Purchase Date', key: 'purchase_date' },
-            { text: 'Barcode', key: 'barcode' }
-            // { text: 'RFID Tag', key: 'rfid_tag' },
-            // { text: 'Identifier', key: 'identifier' }
+            { text: 'Barcode', key: 'barcode' },
+            { text: 'Notes', key: 'notes' },
+            { text: 'Building Name', key: 'building_name' },
+            { text: 'Room Number', key: 'room_number' },
+
         ],
-        desserts: [],
+        allAssets: [],
+        currentAssets: [],
         editedIndex: -1,
         editedItem: {
+            scan_id: null,
+            building_name: '',
+            room_number: '',
+            provider_name: '',
             name: '',
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0
+            current_value: null,
+            purchase_date: null,
+            barcode: '',
+            notes: ''
         },
         defaultItem: {
+            scan_id: null,
+            building_name: '',
+            room_number: '',
+            provider_name: '',
             name: '',
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0
+            current_value: null,
+            purchase_date: null,
+            barcode: '',
+            notes: ''
         }
     }),
 
@@ -146,78 +158,21 @@ export default {
 
     methods: {
         initialize() {
-            this.desserts = [
-                {
-                    name: 'Frozen Yogurt',
-                    calories: 159,
-                    fat: 6.0,
-                    carbs: 24,
-                    protein: 4.0
-                },
-                {
-                    name: 'Ice cream sandwich',
-                    calories: 237,
-                    fat: 9.0,
-                    carbs: 37,
-                    protein: 4.3
-                },
-                {
-                    name: 'Eclair',
-                    calories: 262,
-                    fat: 16.0,
-                    carbs: 23,
-                    protein: 6.0
-                },
-                {
-                    name: 'Cupcake',
-                    calories: 305,
-                    fat: 3.7,
-                    carbs: 67,
-                    protein: 4.3
-                },
-                {
-                    name: 'Gingerbread',
-                    calories: 356,
-                    fat: 16.0,
-                    carbs: 49,
-                    protein: 3.9
-                },
-                {
-                    name: 'Jelly bean',
-                    calories: 375,
-                    fat: 0.0,
-                    carbs: 94,
-                    protein: 0.0
-                },
-                {
-                    name: 'Lollipop',
-                    calories: 392,
-                    fat: 0.2,
-                    carbs: 98,
-                    protein: 0
-                },
-                {
-                    name: 'Honeycomb',
-                    calories: 408,
-                    fat: 3.2,
-                    carbs: 87,
-                    protein: 6.5
-                },
-                {
-                    name: 'Donut',
-                    calories: 452,
-                    fat: 25.0,
-                    carbs: 51,
-                    protein: 4.9
-                },
-                {
-                    name: 'KitKat',
-                    calories: 518,
-                    fat: 26.0,
-                    carbs: 65,
-                    protein: 7
-                }
-            ]
+            const url = import.meta.env.VITE_SERVER_URL + 'admin/all'
+            const state = store.actions.currentState()
+
+            fetch(url, {
+                method: 'GET',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    this.allAssets = data
+                    this.currentAssets = data
+                    console.log('Success:', data)
+                })
+                .catch((error) => {
+                    console.error('Error:', error)
+                })
         },
 
         editItem(item) {

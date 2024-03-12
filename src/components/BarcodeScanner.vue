@@ -5,6 +5,11 @@
 <script>
 import { Html5QrcodeScanner } from 'html5-qrcode'
 export default {
+    data() {
+        return {
+            html5QrcodeScanner: {}
+        }
+    },
     props: {
         qrbox: {
             type: Number,
@@ -20,8 +25,11 @@ export default {
             fps: this.fps,
             qrbox: this.qrbox
         }
-        const html5QrcodeScanner = new Html5QrcodeScanner('qr-code-full-region', config)
-        html5QrcodeScanner.render(this.onScanSuccess)
+        this.html5QrcodeScanner = new Html5QrcodeScanner('qr-code-full-region', config)
+        this.html5QrcodeScanner.render(this.onScanSuccess)
+    },
+    beforeUnmount() {
+        this.html5QrcodeScanner.clear()
     },
     methods: {
         onScanSuccess(decodedText, decodedResult) {
