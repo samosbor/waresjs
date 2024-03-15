@@ -13,9 +13,7 @@ import { RouterView } from 'vue-router'
 
         <v-btn to="/admin"> Admin </v-btn>
     </v-toolbar>
-    <div class="d-flex align-center justify-center" style="min-height: 300px">
-        <RouterView />
-    </div>
+    <RouterView />
 </template>
 
 <style></style>
