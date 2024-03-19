@@ -3,7 +3,9 @@
         :headers="headers"
         :items="currentAssets"
         :sort-by="[{ key: 'purchase_date', order: 'asc' }]"
+        density="compact"
     >
+        <!-- This top slot is the new item button and dialog -->
         <template v-slot:top>
             <v-toolbar>
                 <v-dialog v-model="dialog" max-width="500px">
@@ -24,7 +26,11 @@
                                 <v-text-field
                                     v-model="editedItem.purchase_date"
                                     label="Purchase Date"
-                                ></v-text-field>
+                                >
+                                    <template v-slot:input>
+                                        <div>{{ formatDate(editedItem.purchase_date) }}</div>
+                                    </template>
+                                </v-text-field>
                                 <v-text-field
                                     v-model="editedItem.building_name"
                                     label="Building Name"
@@ -82,12 +88,23 @@
                 </v-dialog>
             </v-toolbar>
         </template>
-        <template v-slot:item.actions="{ item }">
-            <v-icon size="small" class="me-2" @click="editItem(item)"> mdi-pencil </v-icon>
-            <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
-        </template>
-        <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize"> Reset </v-btn>
+
+        <!-- This slot is the table rows -->
+        <template v-slot:item="{ item }">
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.provider_name }}</td>
+                <td>{{ item.current_value }}</td>
+                <td>{{ formatDate(item.purchase_date) }}</td>
+                <td>{{ item.barcode }}</td>
+                <td>{{ item.notes }}</td>
+                <td>{{ item.building_name }}</td>
+                <td>{{ item.room_number }}</td>
+                <td class="text-right">
+                    <v-icon size="small" class="me-2" @click="editItem(item)"> mdi-pencil </v-icon>
+                    <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+                </td>
+            </tr>
         </template>
     </v-data-table>
 </template>
@@ -98,15 +115,14 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            { text: 'Scan Id', key: 'scan_id' },
-            { text: 'Name', key: 'name' },
-            { text: 'Provider', key: 'provider_id' },
-            { text: 'Current Value', key: 'current_value' },
-            { text: 'Purchase Date', key: 'purchase_date' },
-            { text: 'Barcode', key: 'barcode' },
-            { text: 'Notes', key: 'notes' },
-            { text: 'Building Name', key: 'building_name' },
-            { text: 'Room Number', key: 'room_number' }
+            { title: 'Name', key: 'name' },
+            { title: 'Provider', key: 'provider_name' },
+            { title: 'Current Value', key: 'current_value' },
+            { title: 'Purchase Date', key: 'purchase_date' },
+            { title: 'Barcode', key: 'barcode' },
+            { title: 'Notes', key: 'notes' },
+            { title: 'Building Name', key: 'building_name' },
+            { title: 'Room Number', key: 'room_number' }
         ],
         allAssets: [],
         currentAssets: [],
@@ -174,19 +190,19 @@ export default {
         },
 
         editItem(item) {
-            this.editedIndex = this.desserts.indexOf(item)
+            this.editedIndex = this.currentAssets.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
 
         deleteItem(item) {
-            this.editedIndex = this.desserts.indexOf(item)
+            this.editedIndex = this.currentAssets.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
         },
 
         deleteItemConfirm() {
-            this.desserts.splice(this.editedIndex, 1)
+            this.currentAssets.splice(this.editedIndex, 1)
             this.closeDelete()
         },
 
@@ -208,11 +224,21 @@ export default {
 
         save() {
             if (this.editedIndex > -1) {
-                Object.assign(this.desserts[this.editedIndex], this.editedItem)
+                Object.assign(this.currentAssets[this.editedIndex], this.editedItem)
             } else {
-                this.desserts.push(this.editedItem)
+                this.currentAssets.push(this.editedItem)
             }
             this.close()
+        },
+
+        // function to turn date to readable date
+        formatDate(date) {
+            console.log('date', date)
+            if (date === null) {
+                return ''
+            }
+            var options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(date).toLocaleDateString("en-US", options)
         }
     }
 }
