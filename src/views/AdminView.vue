@@ -4,7 +4,8 @@
         :headers="headers"
         :items="currentAssets"
         :sort-by="[{ key: 'purchase_date', order: 'asc' }]"
-        select-strategy="all"
+        item-value="barcode"
+        return-object
         show-select
         density="compact"
     >
@@ -229,7 +230,6 @@ export default {
 
         // function to turn date to readable date
         formatDate(date) {
-            console.log('date', date)
             if (date === null) {
                 return ''
             }
