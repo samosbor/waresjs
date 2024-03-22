@@ -1,8 +1,11 @@
 <template>
     <v-data-table
+        v-model="selectedAssets"
         :headers="headers"
         :items="currentAssets"
         :sort-by="[{ key: 'purchase_date', order: 'asc' }]"
+        select-strategy="all"
+        show-select
         density="compact"
     >
         <!-- This top slot is the new item button and dialog -->
@@ -89,22 +92,13 @@
             </v-toolbar>
         </template>
 
-        <!-- This slot is the table rows -->
-        <template v-slot:item="{ item }">
-            <tr>
-                <td>{{ item.name }}</td>
-                <td>{{ item.provider_name }}</td>
-                <td>{{ item.current_value }}</td>
-                <td>{{ formatDate(item.purchase_date) }}</td>
-                <td>{{ item.barcode }}</td>
-                <td>{{ item.notes }}</td>
-                <td>{{ item.building_name }}</td>
-                <td>{{ item.room_number }}</td>
-                <td class="text-right">
-                    <v-icon size="small" class="me-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                    <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
-                </td>
-            </tr>
+        <template v-slot:item.actions="{ item }">
+            <v-icon class="me-2" size="small" @click="editItem(item)"> mdi-pencil </v-icon>
+            <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+        </template>
+
+        <template v-slot:item.purchase_date="{ value }">
+            {{ formatDate(value) }}
         </template>
     </v-data-table>
 </template>
@@ -122,10 +116,12 @@ export default {
             { title: 'Barcode', key: 'barcode' },
             { title: 'Notes', key: 'notes' },
             { title: 'Building Name', key: 'building_name' },
-            { title: 'Room Number', key: 'room_number' }
+            { title: 'Room Number', key: 'room_number' },
+            { title: 'Actions', key: 'actions', sortable: false }
         ],
         allAssets: [],
         currentAssets: [],
+        selectedAssets: [],
         editedIndex: -1,
         editedItem: {
             scan_id: null,
@@ -237,8 +233,8 @@ export default {
             if (date === null) {
                 return ''
             }
-            var options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(date).toLocaleDateString("en-US", options)
+            var options = { year: 'numeric', month: 'long', day: 'numeric' }
+            return new Date(date).toLocaleDateString('en-US', options)
         }
     }
 }
